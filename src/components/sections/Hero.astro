@@ -1,0 +1,382 @@
+---
+import NeuralNetwork from '../canvas/NeuralNetwork.astro';
+import AgentFlow from '../canvas/AgentFlow.astro';
+import TypeWriter from '../ui/TypeWriter.astro';
+import Button from '../ui/Button.astro';
+---
+
+<section id="hero" class="hero">
+  <NeuralNetwork />
+  <AgentFlow />
+
+  <div class="hero__content">
+    <div class="hero__text">
+      <div class="hero__boot-sequence">
+        <span class="hero__boot-line" style="--delay: 0">[ SYSTEM ] Neural interface online</span>
+        <span class="hero__boot-line" style="--delay: 1">[ STATUS ] AI cores initialized</span>
+        <span class="hero__boot-line hero__boot-line--success" style="--delay: 2">[ READY ] Welcome, user_</span>
+      </div>
+      <h1 class="hero__name glitch" data-text="MEELAD DASHTI">
+        MEELAD DASHTI
+      </h1>
+      <p class="hero__title">
+        <span class="hero__title-bracket">[</span>
+        <TypeWriter
+          phrases={[
+            "AI/ML_ENGINEER",
+            "RAG_SYSTEMS_ARCHITECT",
+            "LLM_SPECIALIST",
+            "PRODUCTION_AI_BUILDER"
+          ]}
+          typingSpeed={80}
+          deletingSpeed={40}
+        />
+        <span class="hero__title-bracket">]</span>
+      </p>
+      <p class="hero__description">
+        <span class="hero__description-line">&gt; Building production-grade AI systems</span>
+        <span class="hero__description-line">&gt; Sub-2s latency | 95% accuracy | Real-time inference</span>
+        <span class="hero__description-line">&gt; RAG • LangGraph • WhisperX • AWS</span>
+      </p>
+      <div class="hero__cta">
+        <Button href="#projects" variant="primary">&gt;_ VIEW_PROJECTS</Button>
+        <Button href="#contact" variant="outline">&gt;_ INIT_CONTACT</Button>
+        <Button href="/Meelad_Resume.pdf" variant="ghost" external>&gt;_ DOWNLOAD_CV</Button>
+      </div>
+    </div>
+  </div>
+
+  <div class="hero__scroll">
+    <span class="hero__scroll-text">&gt; scroll_to_explore</span>
+    <div class="hero__scroll-arrow">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M12 5L12 19M12 19L5 12M12 19L19 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" transform="rotate(180 12 12)"/>
+      </svg>
+    </div>
+  </div>
+
+  <div class="hero__gradient-orb hero__gradient-orb--1"></div>
+  <div class="hero__gradient-orb hero__gradient-orb--2"></div>
+  <div class="hero__scanlines"></div>
+</section>
+
+<style>
+  .hero {
+    position: relative;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    background: var(--bg-primary);
+  }
+
+  .hero__scanlines {
+    position: absolute;
+    inset: 0;
+    background: repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 2px,
+      rgba(57, 255, 20, 0.03) 2px,
+      rgba(57, 255, 20, 0.03) 4px
+    );
+    pointer-events: none;
+    z-index: 5;
+  }
+
+  .hero__content {
+    position: relative;
+    z-index: 10;
+    text-align: center;
+    padding: 2rem;
+    max-width: 900px;
+  }
+
+  .hero__boot-sequence {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+    margin-bottom: 1.5rem;
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+  }
+
+  .hero__boot-line {
+    opacity: 0;
+    color: var(--text-muted);
+    animation: boot-line 0.5s ease-out forwards;
+    animation-delay: calc(var(--delay) * 0.4s);
+  }
+
+  .hero__boot-line--success {
+    color: var(--neon-green);
+    text-shadow: var(--glow-subtle);
+  }
+
+  @keyframes boot-line {
+    0% {
+      opacity: 0;
+      transform: translateX(-10px);
+    }
+    100% {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+
+  .hero__name {
+    font-size: clamp(2.5rem, 10vw, 5rem);
+    font-weight: 700;
+    margin-bottom: 1.5rem;
+    color: var(--neon-green);
+    text-shadow: var(--glow-green);
+    letter-spacing: 0.15em;
+    opacity: 0;
+    animation: fade-in-up 0.6s ease-out 1.2s forwards;
+  }
+
+  /* Glitch effect for name */
+  .glitch {
+    position: relative;
+    animation: glitch-skew 1s infinite linear alternate-reverse;
+  }
+
+  .glitch::before,
+  .glitch::after {
+    content: attr(data-text);
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+  }
+
+  .glitch::before {
+    left: 2px;
+    text-shadow: -2px 0 var(--neon-pink);
+    clip: rect(44px, 450px, 56px, 0);
+    animation: glitch-anim 5s infinite linear alternate-reverse;
+  }
+
+  .glitch::after {
+    left: -2px;
+    text-shadow: -2px 0 var(--electric-blue);
+    clip: rect(44px, 450px, 56px, 0);
+    animation: glitch-anim2 5s infinite linear alternate-reverse;
+  }
+
+  .hero__title {
+    font-family: var(--font-mono);
+    font-size: clamp(1rem, 3vw, 1.5rem);
+    color: var(--text-secondary);
+    margin-bottom: 2rem;
+    min-height: 2em;
+    opacity: 0;
+    animation: fade-in-up 0.6s ease-out 1.4s forwards;
+  }
+
+  .hero__title-bracket {
+    color: var(--neon-pink);
+    text-shadow: var(--glow-pink);
+  }
+
+  .hero__description {
+    font-family: var(--font-mono);
+    font-size: 0.95rem;
+    color: var(--text-secondary);
+    max-width: 700px;
+    margin: 0 auto 2.5rem;
+    opacity: 0;
+    animation: fade-in-up 0.6s ease-out 1.6s forwards;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    text-align: left;
+    padding: 1.5rem;
+    background: rgba(57, 255, 20, 0.05);
+    border: 1px solid rgba(57, 255, 20, 0.3);
+    border-radius: var(--radius-md);
+    box-shadow: 0 0 30px rgba(57, 255, 20, 0.1);
+  }
+
+  .hero__description-line {
+    display: block;
+  }
+
+  .hero__description-line::first-letter {
+    color: var(--neon-green);
+    text-shadow: var(--glow-subtle);
+  }
+
+  .hero__cta {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    flex-wrap: wrap;
+    opacity: 0;
+    animation: fade-in-up 0.6s ease-out 1.8s forwards;
+  }
+
+  .hero__scroll {
+    position: absolute;
+    bottom: 2rem;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    opacity: 0;
+    animation: fade-in 1s ease-out 1.5s forwards;
+  }
+
+  .hero__scroll-text {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    text-transform: lowercase;
+  }
+
+  .hero__scroll-arrow {
+    color: var(--neon-green);
+    animation: bounce 2s ease-in-out infinite;
+    filter: drop-shadow(0 0 10px var(--neon-green));
+  }
+
+  /* Gradient orbs */
+  .hero__gradient-orb {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(100px);
+    opacity: 0.3;
+    pointer-events: none;
+  }
+
+  .hero__gradient-orb--1 {
+    width: 600px;
+    height: 600px;
+    background: var(--neon-green);
+    top: -200px;
+    right: -200px;
+  }
+
+  .hero__gradient-orb--2 {
+    width: 500px;
+    height: 500px;
+    background: var(--neon-pink);
+    bottom: -150px;
+    left: -150px;
+  }
+
+  @keyframes fade-in-up {
+    from {
+      opacity: 0;
+      transform: translateY(30px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes fade-in {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
+  @keyframes bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(10px); }
+  }
+
+  @keyframes glitch-anim {
+    0% { clip: rect(31px, 9999px, 94px, 0); }
+    5% { clip: rect(70px, 9999px, 71px, 0); }
+    10% { clip: rect(29px, 9999px, 24px, 0); }
+    15% { clip: rect(61px, 9999px, 97px, 0); }
+    20% { clip: rect(85px, 9999px, 59px, 0); }
+    25% { clip: rect(37px, 9999px, 15px, 0); }
+    30% { clip: rect(79px, 9999px, 20px, 0); }
+    35% { clip: rect(17px, 9999px, 56px, 0); }
+    40% { clip: rect(91px, 9999px, 34px, 0); }
+    45% { clip: rect(72px, 9999px, 47px, 0); }
+    50% { clip: rect(53px, 9999px, 88px, 0); }
+    55% { clip: rect(42px, 9999px, 13px, 0); }
+    60% { clip: rect(65px, 9999px, 74px, 0); }
+    65% { clip: rect(28px, 9999px, 99px, 0); }
+    70% { clip: rect(84px, 9999px, 38px, 0); }
+    75% { clip: rect(19px, 9999px, 67px, 0); }
+    80% { clip: rect(73px, 9999px, 22px, 0); }
+    85% { clip: rect(46px, 9999px, 81px, 0); }
+    90% { clip: rect(58px, 9999px, 45px, 0); }
+    95% { clip: rect(33px, 9999px, 92px, 0); }
+    100% { clip: rect(76px, 9999px, 18px, 0); }
+  }
+
+  @keyframes glitch-anim2 {
+    0% { clip: rect(65px, 9999px, 100px, 0); }
+    5% { clip: rect(52px, 9999px, 74px, 0); }
+    10% { clip: rect(79px, 9999px, 85px, 0); }
+    15% { clip: rect(75px, 9999px, 5px, 0); }
+    20% { clip: rect(67px, 9999px, 61px, 0); }
+    25% { clip: rect(14px, 9999px, 79px, 0); }
+    30% { clip: rect(1px, 9999px, 66px, 0); }
+    35% { clip: rect(86px, 9999px, 30px, 0); }
+    40% { clip: rect(23px, 9999px, 98px, 0); }
+    45% { clip: rect(85px, 9999px, 72px, 0); }
+    50% { clip: rect(71px, 9999px, 75px, 0); }
+    55% { clip: rect(2px, 9999px, 48px, 0); }
+    60% { clip: rect(30px, 9999px, 16px, 0); }
+    65% { clip: rect(59px, 9999px, 50px, 0); }
+    70% { clip: rect(41px, 9999px, 62px, 0); }
+    75% { clip: rect(2px, 9999px, 82px, 0); }
+    80% { clip: rect(47px, 9999px, 73px, 0); }
+    85% { clip: rect(3px, 9999px, 27px, 0); }
+    90% { clip: rect(26px, 9999px, 55px, 0); }
+    95% { clip: rect(42px, 9999px, 25px, 0); }
+    100% { clip: rect(38px, 9999px, 49px, 0); }
+  }
+
+  @keyframes glitch-skew {
+    0% { transform: skew(0deg); }
+    20% { transform: skew(0deg); }
+    21% { transform: skew(1deg); }
+    22% { transform: skew(0deg); }
+    80% { transform: skew(0deg); }
+    81% { transform: skew(-1deg); }
+    82% { transform: skew(0deg); }
+    100% { transform: skew(0deg); }
+  }
+
+  @media (max-width: 768px) {
+    .hero__content {
+      padding: 1rem;
+    }
+
+    .hero__description {
+      text-align: center;
+      padding: 1rem;
+    }
+
+    .hero__cta {
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .hero__gradient-orb--1 {
+      width: 300px;
+      height: 300px;
+    }
+
+    .hero__gradient-orb--2 {
+      width: 250px;
+      height: 250px;
+    }
+
+    .glitch::before,
+    .glitch::after {
+      display: none;
+    }
+  }
+</style>

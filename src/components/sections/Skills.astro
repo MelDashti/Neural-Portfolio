@@ -1,0 +1,114 @@
+---
+import GlowText from '../ui/GlowText.astro';
+import { skills, skillCategories } from '../../data/skills';
+---
+
+<section id="skills" class="skills">
+  <div class="container">
+    <h2 class="section-title">
+      <GlowText as="span" color="cyan">Skills & Expertise</GlowText>
+    </h2>
+
+    <div class="skills__grid">
+      {skillCategories.map(category => (
+        <div class="skills__category" style={`--category-color: ${category.color}`}>
+          <h3 class="skills__category-title">{category.name}</h3>
+          <div class="skills__list">
+            {skills
+              .filter(skill => skill.category === category.id)
+              .map(skill => (
+                <div class="skill" data-proficiency={skill.proficiency}>
+                  <span class="skill__name">{skill.name}</span>
+                  <div class="skill__bar">
+                    <div
+                      class="skill__progress"
+                      style={`--progress: ${skill.proficiency * 20}%`}
+                    ></div>
+                  </div>
+                </div>
+              ))}
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .skills {
+    padding: var(--section-padding) 0;
+    background: var(--bg-primary);
+    position: relative;
+  }
+
+  .section-title {
+    text-align: center;
+    margin-bottom: 4rem;
+  }
+
+  .skills__grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 3rem;
+  }
+
+  .skills__category {
+    background: var(--bg-card);
+    border: 1px solid var(--bg-tertiary);
+    border-radius: var(--radius-lg);
+    padding: 2rem;
+    transition: all var(--transition-normal);
+  }
+
+  .skills__category:hover {
+    border-color: var(--category-color);
+    box-shadow: 0 0 30px rgba(0, 255, 255, 0.1);
+  }
+
+  .skills__category-title {
+    font-size: 1.25rem;
+    color: var(--category-color);
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid var(--bg-tertiary);
+  }
+
+  .skills__list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .skill {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .skill__name {
+    font-size: 0.9375rem;
+    color: var(--text-primary);
+  }
+
+  .skill__bar {
+    height: 4px;
+    background: var(--bg-tertiary);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+
+  .skill__progress {
+    height: 100%;
+    width: var(--progress);
+    background: var(--category-color);
+    border-radius: 2px;
+    transition: width 1s ease-out;
+    box-shadow: 0 0 10px var(--category-color);
+  }
+
+  @media (max-width: 768px) {
+    .skills__grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

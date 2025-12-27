@@ -1,0 +1,270 @@
+---
+// Agentic AI / LangGraph Style Flow Visualization
+---
+
+<div class="agent-flow">
+  <!-- Agent Nodes -->
+  <div class="agent-node agent-node--llm" style="--x: 15%; --y: 20%;">
+    <div class="agent-node__icon">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M12 2a3 3 0 0 0-3 3v1a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/>
+        <path d="M19 9a7 7 0 0 1-6 6.93V20"/>
+        <path d="M5 9a7 7 0 0 0 6 6.93V20"/>
+        <circle cx="12" cy="22" r="2"/>
+      </svg>
+    </div>
+    <span class="agent-node__label">LLM</span>
+    <div class="agent-node__pulse"></div>
+  </div>
+
+  <div class="agent-node agent-node--tool" style="--x: 85%; --y: 25%;">
+    <div class="agent-node__icon">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76Z"/>
+      </svg>
+    </div>
+    <span class="agent-node__label">TOOLS</span>
+    <div class="agent-node__pulse"></div>
+  </div>
+
+  <div class="agent-node agent-node--rag" style="--x: 10%; --y: 75%;">
+    <div class="agent-node__icon">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <ellipse cx="12" cy="5" rx="9" ry="3"/>
+        <path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/>
+        <path d="M3 12c0 1.66 4 3 9 3s9-1.34 9-3"/>
+      </svg>
+    </div>
+    <span class="agent-node__label">RAG</span>
+    <div class="agent-node__pulse"></div>
+  </div>
+
+  <div class="agent-node agent-node--agent" style="--x: 80%; --y: 80%;">
+    <div class="agent-node__icon">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <rect x="3" y="3" width="18" height="18" rx="2"/>
+        <path d="M9 9h.01M15 9h.01M9 15c.83.67 1.83 1 3 1s2.17-.33 3-1"/>
+      </svg>
+    </div>
+    <span class="agent-node__label">AGENT</span>
+    <div class="agent-node__pulse"></div>
+  </div>
+
+  <!-- Data Flow Paths -->
+  <svg class="agent-flow__paths" viewBox="0 0 100 100" preserveAspectRatio="none">
+    <!-- LLM to Tools -->
+    <path class="flow-path flow-path--1" d="M 20 25 Q 50 15 80 28" />
+    <circle class="flow-dot flow-dot--1" r="1.5">
+      <animateMotion dur="2s" repeatCount="indefinite" path="M 20 25 Q 50 15 80 28" />
+    </circle>
+
+    <!-- LLM to RAG -->
+    <path class="flow-path flow-path--2" d="M 18 28 Q 8 50 15 72" />
+    <circle class="flow-dot flow-dot--2" r="1.5">
+      <animateMotion dur="2.5s" repeatCount="indefinite" path="M 18 28 Q 8 50 15 72" />
+    </circle>
+
+    <!-- RAG to Agent -->
+    <path class="flow-path flow-path--3" d="M 18 78 Q 50 90 75 82" />
+    <circle class="flow-dot flow-dot--3" r="1.5">
+      <animateMotion dur="2s" repeatCount="indefinite" path="M 18 78 Q 50 90 75 82" />
+    </circle>
+
+    <!-- Tools to Agent -->
+    <path class="flow-path flow-path--4" d="M 82 32 Q 90 55 82 77" />
+    <circle class="flow-dot flow-dot--4" r="1.5">
+      <animateMotion dur="1.8s" repeatCount="indefinite" path="M 82 32 Q 90 55 82 77" />
+    </circle>
+
+    <!-- Agent back to LLM (feedback loop) -->
+    <path class="flow-path flow-path--5" d="M 78 78 Q 50 50 22 28" />
+    <circle class="flow-dot flow-dot--5" r="1.5">
+      <animateMotion dur="3s" repeatCount="indefinite" path="M 78 78 Q 50 50 22 28" />
+    </circle>
+  </svg>
+
+  <!-- Floating Labels -->
+  <div class="agent-flow__label" style="--x: 50%; --y: 10%;">
+    <span class="typing-label">→ query_embedding</span>
+  </div>
+  <div class="agent-flow__label" style="--x: 5%; --y: 50%;">
+    <span class="typing-label">← vector_search</span>
+  </div>
+  <div class="agent-flow__label" style="--x: 50%; --y: 95%;">
+    <span class="typing-label">→ tool_response</span>
+  </div>
+  <div class="agent-flow__label" style="--x: 92%; --y: 55%;">
+    <span class="typing-label">← execute</span>
+  </div>
+</div>
+
+<style>
+  .agent-flow {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 3;
+    overflow: hidden;
+  }
+
+  .agent-node {
+    position: absolute;
+    left: var(--x);
+    top: var(--y);
+    transform: translate(-50%, -50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .agent-node__icon {
+    width: 40px;
+    height: 40px;
+    padding: 8px;
+    border-radius: 50%;
+    background: var(--bg-card);
+    border: 2px solid var(--neon-green);
+    box-shadow: 0 0 20px rgba(57, 255, 20, 0.4);
+    color: var(--neon-green);
+    animation: node-float 4s ease-in-out infinite;
+  }
+
+  .agent-node__icon svg {
+    width: 100%;
+    height: 100%;
+  }
+
+  .agent-node--tool .agent-node__icon {
+    border-color: var(--neon-pink);
+    box-shadow: 0 0 20px rgba(255, 0, 255, 0.4);
+    color: var(--neon-pink);
+    animation-delay: 1s;
+  }
+
+  .agent-node--rag .agent-node__icon {
+    border-color: var(--neon-cyan);
+    box-shadow: 0 0 20px rgba(0, 255, 255, 0.4);
+    color: var(--neon-cyan);
+    animation-delay: 2s;
+  }
+
+  .agent-node--agent .agent-node__icon {
+    border-color: var(--neon-purple);
+    box-shadow: 0 0 20px rgba(191, 0, 255, 0.4);
+    color: var(--neon-purple);
+    animation-delay: 3s;
+  }
+
+  @keyframes node-float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-5px); }
+  }
+
+  .agent-node__label {
+    font-family: var(--font-mono);
+    font-size: 0.6rem;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    background: var(--bg-primary);
+    padding: 2px 6px;
+    border-radius: 2px;
+  }
+
+  .agent-node__pulse {
+    position: absolute;
+    inset: -5px;
+    border: 1px solid var(--neon-green);
+    border-radius: 50%;
+    animation: node-pulse 3s ease-out infinite;
+    opacity: 0;
+  }
+
+  .agent-node--tool .agent-node__pulse { border-color: var(--neon-pink); }
+  .agent-node--rag .agent-node__pulse { border-color: var(--neon-cyan); }
+  .agent-node--agent .agent-node__pulse { border-color: var(--neon-purple); }
+
+  @keyframes node-pulse {
+    0% { transform: scale(1); opacity: 0.8; }
+    100% { transform: scale(2); opacity: 0; }
+  }
+
+  .agent-flow__paths {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+  }
+
+  .flow-path {
+    fill: none;
+    stroke: rgba(57, 255, 20, 0.2);
+    stroke-width: 0.3;
+    stroke-dasharray: 2, 2;
+  }
+
+  .flow-path--2 { stroke: rgba(0, 255, 255, 0.2); }
+  .flow-path--3 { stroke: rgba(0, 255, 255, 0.2); }
+  .flow-path--4 { stroke: rgba(255, 0, 255, 0.2); }
+  .flow-path--5 { stroke: rgba(191, 0, 255, 0.2); }
+
+  .flow-dot {
+    fill: var(--neon-green);
+    filter: drop-shadow(0 0 4px var(--neon-green));
+  }
+
+  .flow-dot--2, .flow-dot--3 {
+    fill: var(--neon-cyan);
+    filter: drop-shadow(0 0 4px var(--neon-cyan));
+  }
+
+  .flow-dot--4 {
+    fill: var(--neon-pink);
+    filter: drop-shadow(0 0 4px var(--neon-pink));
+  }
+
+  .flow-dot--5 {
+    fill: var(--neon-purple);
+    filter: drop-shadow(0 0 4px var(--neon-purple));
+  }
+
+  .agent-flow__label {
+    position: absolute;
+    left: var(--x);
+    top: var(--y);
+    transform: translate(-50%, -50%);
+    font-family: var(--font-mono);
+    font-size: 0.55rem;
+    color: var(--text-muted);
+    opacity: 0.6;
+    white-space: nowrap;
+  }
+
+  .typing-label {
+    display: inline-block;
+    overflow: hidden;
+    animation: typing-fade 4s ease-in-out infinite;
+  }
+
+  @keyframes typing-fade {
+    0%, 100% { opacity: 0.3; }
+    50% { opacity: 0.8; }
+  }
+
+  @media (max-width: 768px) {
+    .agent-node__icon {
+      width: 30px;
+      height: 30px;
+      padding: 6px;
+    }
+
+    .agent-node__label {
+      font-size: 0.5rem;
+    }
+
+    .agent-flow__label {
+      display: none;
+    }
+  }
+</style>

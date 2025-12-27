@@ -1,0 +1,39 @@
+---
+interface Props {
+  class?: string;
+  id?: string;
+}
+
+const { class: className = '', id = 'neural-canvas' } = Astro.props;
+---
+
+<canvas id={id} class:list={['neural-canvas', className]}></canvas>
+
+<script>
+  import { initNeuralNetwork } from './neural-network';
+
+  function init() {
+    const canvas = document.getElementById('neural-canvas') as HTMLCanvasElement;
+    if (canvas) {
+      initNeuralNetwork(canvas);
+    }
+  }
+
+  // Initialize when DOM is ready
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
+</script>
+
+<style>
+  .neural-canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: auto;
+  }
+</style>

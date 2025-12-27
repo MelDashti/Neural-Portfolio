@@ -1,0 +1,325 @@
+---
+import GlowText from '../ui/GlowText.astro';
+---
+
+<section id="playground" class="playground">
+  <div class="container">
+    <h2 class="section-title">
+      <GlowText as="span" color="gradient">Neural Network Playground</GlowText>
+    </h2>
+    <p class="playground__subtitle">
+      Interactive visualization of a neural network learning to classify 2D data.
+      Click on the canvas to add data points, then train the network!
+    </p>
+
+    <div class="playground__wrapper">
+      <div class="playground__canvas-container">
+        <canvas id="playground-canvas" width="400" height="400"></canvas>
+      </div>
+
+      <div class="playground__controls">
+        <div class="playground__stats">
+          <div class="playground__stat">
+            <span class="playground__stat-label">Epoch</span>
+            <span class="playground__stat-value" id="epoch-display">0</span>
+          </div>
+          <div class="playground__stat">
+            <span class="playground__stat-label">Loss</span>
+            <span class="playground__stat-value" id="loss-display">0.000</span>
+          </div>
+        </div>
+
+        <div class="playground__buttons">
+          <button id="train-btn" class="playground__btn playground__btn--primary">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+              <polygon points="5 3 19 12 5 21 5 3"/>
+            </svg>
+            Train
+          </button>
+          <button id="stop-btn" class="playground__btn">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+              <rect x="6" y="4" width="4" height="16"/>
+              <rect x="14" y="4" width="4" height="16"/>
+            </svg>
+            Stop
+          </button>
+          <button id="reset-btn" class="playground__btn">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="1 4 1 10 7 10"/>
+              <path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/>
+            </svg>
+            Reset
+          </button>
+          <button id="clear-btn" class="playground__btn">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="3 6 5 6 21 6"/>
+              <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+            </svg>
+            Clear
+          </button>
+        </div>
+
+        <div class="playground__info">
+          <p><strong>Click</strong> on the canvas to add data points (alternating colors).</p>
+          <p><strong>Network:</strong> 2 → 6 → 4 → 1 neurons</p>
+          <p><strong>Learning Rate:</strong> 0.03</p>
+        </div>
+
+        <div class="playground__legend">
+          <div class="playground__legend-item">
+            <span class="playground__legend-dot playground__legend-dot--cyan"></span>
+            Class 1
+          </div>
+          <div class="playground__legend-item">
+            <span class="playground__legend-dot playground__legend-dot--pink"></span>
+            Class 0
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  import { initPlayground } from './neural-playground';
+
+  let playground: ReturnType<typeof initPlayground> | null = null;
+
+  function init() {
+    const canvas = document.getElementById('playground-canvas') as HTMLCanvasElement;
+    if (!canvas) return;
+
+    playground = initPlayground(canvas);
+
+    // Get UI elements
+    const trainBtn = document.getElementById('train-btn');
+    const stopBtn = document.getElementById('stop-btn');
+    const resetBtn = document.getElementById('reset-btn');
+    const clearBtn = document.getElementById('clear-btn');
+    const epochDisplay = document.getElementById('epoch-display');
+    const lossDisplay = document.getElementById('loss-display');
+
+    // Update stats display
+    const updateStats = () => {
+      if (!playground) return;
+      const stats = playground.getStats();
+      if (epochDisplay) epochDisplay.textContent = stats.epoch.toString();
+      if (lossDisplay) lossDisplay.textContent = stats.loss.toFixed(4);
+    };
+
+    // Set up button handlers
+    trainBtn?.addEventListener('click', () => {
+      playground?.startTraining();
+      trainBtn.classList.add('playground__btn--active');
+      stopBtn?.classList.remove('playground__btn--active');
+
+      // Update stats periodically
+      const statsInterval = setInterval(() => {
+        updateStats();
+      }, 100);
+
+      // Store interval for cleanup
+      (trainBtn as any)._statsInterval = statsInterval;
+    });
+
+    stopBtn?.addEventListener('click', () => {
+      playground?.stopTraining();
+      stopBtn.classList.add('playground__btn--active');
+      trainBtn?.classList.remove('playground__btn--active');
+
+      // Clear stats interval
+      if ((trainBtn as any)?._statsInterval) {
+        clearInterval((trainBtn as any)._statsInterval);
+      }
+    });
+
+    resetBtn?.addEventListener('click', () => {
+      playground?.reset();
+      trainBtn?.classList.remove('playground__btn--active');
+      stopBtn?.classList.remove('playground__btn--active');
+      updateStats();
+    });
+
+    clearBtn?.addEventListener('click', () => {
+      playground?.clearData();
+      trainBtn?.classList.remove('playground__btn--active');
+      stopBtn?.classList.remove('playground__btn--active');
+      updateStats();
+    });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
+</script>
+
+<style>
+  .playground {
+    padding: var(--section-padding) 0;
+    background: var(--bg-primary);
+    position: relative;
+  }
+
+  .section-title {
+    text-align: center;
+    margin-bottom: 1rem;
+  }
+
+  .playground__subtitle {
+    text-align: center;
+    color: var(--text-secondary);
+    max-width: 600px;
+    margin: 0 auto 3rem;
+  }
+
+  .playground__wrapper {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 2rem;
+    max-width: 800px;
+    margin: 0 auto;
+    align-items: start;
+  }
+
+  .playground__canvas-container {
+    background: var(--bg-card);
+    border: 1px solid var(--bg-tertiary);
+    border-radius: var(--radius-lg);
+    padding: 1rem;
+    box-shadow: 0 0 40px rgba(0, 255, 255, 0.1);
+  }
+
+  #playground-canvas {
+    display: block;
+    border-radius: var(--radius-md);
+    cursor: crosshair;
+  }
+
+  .playground__controls {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  .playground__stats {
+    display: flex;
+    gap: 2rem;
+  }
+
+  .playground__stat {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+
+  .playground__stat-label {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+
+  .playground__stat-value {
+    font-family: var(--font-mono);
+    font-size: 1.5rem;
+    color: var(--neon-cyan);
+    font-weight: 600;
+  }
+
+  .playground__buttons {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.75rem;
+  }
+
+  .playground__btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1rem;
+    font-family: var(--font-mono);
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+    background: var(--bg-tertiary);
+    border: 1px solid var(--bg-tertiary);
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+  }
+
+  .playground__btn:hover {
+    background: var(--bg-secondary);
+    color: var(--text-primary);
+    border-color: var(--neon-cyan);
+  }
+
+  .playground__btn--primary {
+    background: rgba(0, 255, 255, 0.15);
+    color: var(--neon-cyan);
+    border-color: var(--neon-cyan);
+  }
+
+  .playground__btn--primary:hover {
+    background: rgba(0, 255, 255, 0.25);
+  }
+
+  .playground__btn--active {
+    background: rgba(0, 255, 255, 0.2);
+    border-color: var(--neon-cyan);
+    color: var(--neon-cyan);
+  }
+
+  .playground__info {
+    font-size: 0.875rem;
+    color: var(--text-muted);
+    line-height: 1.6;
+  }
+
+  .playground__info strong {
+    color: var(--text-secondary);
+  }
+
+  .playground__legend {
+    display: flex;
+    gap: 1.5rem;
+  }
+
+  .playground__legend-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+  }
+
+  .playground__legend-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+  }
+
+  .playground__legend-dot--cyan {
+    background: var(--neon-cyan);
+    box-shadow: 0 0 10px var(--neon-cyan);
+  }
+
+  .playground__legend-dot--pink {
+    background: var(--neon-pink);
+    box-shadow: 0 0 10px var(--neon-pink);
+  }
+
+  @media (max-width: 768px) {
+    .playground__wrapper {
+      grid-template-columns: 1fr;
+    }
+
+    #playground-canvas {
+      width: 100%;
+      height: auto;
+    }
+  }
+</style>

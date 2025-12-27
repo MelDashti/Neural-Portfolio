@@ -1,0 +1,259 @@
+---
+import GlowText from '../ui/GlowText.astro';
+import { experiences } from '../../data/experience';
+---
+
+<section id="experience" class="experience">
+  <div class="container">
+    <h2 class="section-title">
+      <GlowText as="span" color="cyan">Experience & Education</GlowText>
+    </h2>
+
+    <div class="timeline">
+      {experiences.map((exp, index) => (
+        <div class={`timeline__item timeline__item--${exp.type}`}>
+          <div class="timeline__marker">
+            <div class="timeline__dot"></div>
+            {index < experiences.length - 1 && <div class="timeline__line"></div>}
+          </div>
+
+          <div class="timeline__content">
+            <div class="timeline__header">
+              <span class="timeline__period">{exp.period}</span>
+              <span class="timeline__type">{exp.type === 'work' ? 'Work' : 'Education'}</span>
+            </div>
+
+            <h3 class="timeline__title">{exp.title}</h3>
+
+            <div class="timeline__organization">
+              {exp.link ? (
+                <a href={exp.link} target="_blank" rel="noopener noreferrer">
+                  {exp.organization}
+                </a>
+              ) : (
+                exp.organization
+              )}
+              <span class="timeline__location">{exp.location}</span>
+            </div>
+
+            <ul class="timeline__description">
+              {exp.description.map(item => (
+                <li>{item}</li>
+              ))}
+            </ul>
+
+            {exp.technologies && (
+              <div class="timeline__technologies">
+                {exp.technologies.map(tech => (
+                  <span class="timeline__tech">{tech}</span>
+                ))}
+              </div>
+            )}
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .experience {
+    padding: var(--section-padding) 0;
+    background: var(--bg-primary);
+    position: relative;
+  }
+
+  .section-title {
+    text-align: center;
+    margin-bottom: 4rem;
+  }
+
+  .timeline {
+    max-width: 800px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .timeline__item {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 2rem;
+    position: relative;
+  }
+
+  .timeline__marker {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 20px;
+  }
+
+  .timeline__dot {
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: var(--neon-cyan);
+    box-shadow: 0 0 15px var(--neon-cyan);
+    flex-shrink: 0;
+    z-index: 1;
+  }
+
+  .timeline__item--education .timeline__dot {
+    background: var(--neon-purple);
+    box-shadow: 0 0 15px var(--neon-purple);
+  }
+
+  .timeline__line {
+    width: 2px;
+    flex-grow: 1;
+    background: linear-gradient(
+      to bottom,
+      var(--neon-cyan),
+      var(--bg-tertiary)
+    );
+    margin-top: 0.5rem;
+  }
+
+  .timeline__item--education .timeline__line {
+    background: linear-gradient(
+      to bottom,
+      var(--neon-purple),
+      var(--bg-tertiary)
+    );
+  }
+
+  .timeline__content {
+    background: var(--bg-card);
+    border: 1px solid var(--bg-tertiary);
+    border-radius: var(--radius-lg);
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+    transition: all var(--transition-normal);
+  }
+
+  .timeline__content:hover {
+    border-color: var(--neon-cyan);
+    box-shadow: 0 0 20px rgba(0, 255, 255, 0.1);
+  }
+
+  .timeline__item--education .timeline__content:hover {
+    border-color: var(--neon-purple);
+    box-shadow: 0 0 20px rgba(168, 85, 247, 0.1);
+  }
+
+  .timeline__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.75rem;
+  }
+
+  .timeline__period {
+    font-family: var(--font-mono);
+    font-size: 0.875rem;
+    color: var(--neon-cyan);
+  }
+
+  .timeline__item--education .timeline__period {
+    color: var(--neon-purple);
+  }
+
+  .timeline__type {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--text-muted);
+    background: var(--bg-tertiary);
+    padding: 0.25rem 0.5rem;
+    border-radius: var(--radius-sm);
+  }
+
+  .timeline__title {
+    font-size: 1.25rem;
+    color: var(--text-primary);
+    margin-bottom: 0.5rem;
+  }
+
+  .timeline__organization {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    align-items: center;
+    margin-bottom: 1rem;
+    color: var(--text-secondary);
+  }
+
+  .timeline__organization a {
+    color: var(--text-primary);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+
+  .timeline__location {
+    font-size: 0.875rem;
+    color: var(--text-muted);
+  }
+
+  .timeline__location::before {
+    content: '•';
+    margin-right: 0.5rem;
+  }
+
+  .timeline__description {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+  }
+
+  .timeline__description li {
+    font-size: 0.9375rem;
+    color: var(--text-secondary);
+    padding-left: 1rem;
+    position: relative;
+  }
+
+  .timeline__description li::before {
+    content: '▹';
+    position: absolute;
+    left: 0;
+    color: var(--neon-cyan);
+  }
+
+  .timeline__item--education .timeline__description li::before {
+    color: var(--neon-purple);
+  }
+
+  .timeline__technologies {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .timeline__tech {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    background: var(--bg-tertiary);
+    padding: 0.25rem 0.5rem;
+    border-radius: var(--radius-sm);
+  }
+
+  @media (max-width: 768px) {
+    .timeline__item {
+      grid-template-columns: 1fr;
+      gap: 1rem;
+    }
+
+    .timeline__marker {
+      display: none;
+    }
+
+    .timeline__content {
+      margin-bottom: 1rem;
+    }
+  }
+</style>

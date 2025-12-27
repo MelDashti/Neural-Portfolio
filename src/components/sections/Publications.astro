@@ -1,0 +1,220 @@
+---
+import GlowText from '../ui/GlowText.astro';
+import { publications } from '../../data/publications';
+---
+
+<section id="publications" class="publications">
+  <div class="container">
+    <h2 class="section-title">
+      <GlowText as="span" color="purple">Research & Publications</GlowText>
+    </h2>
+
+    <div class="publications__list">
+      {publications.map(pub => (
+        <article class="publication-card">
+          <div class="publication-card__venue">
+            <span class="publication-card__venue-badge">{pub.venueShort}</span>
+            <span class="publication-card__year">{pub.year}</span>
+          </div>
+
+          <h3 class="publication-card__title">{pub.title}</h3>
+
+          <p class="publication-card__authors">
+            {pub.authors.map((author, i) => (
+              <>
+                <span class={author === 'Meelad Dashti' ? 'publication-card__author--highlight' : ''}>
+                  {author}
+                </span>
+                {i < pub.authors.length - 1 && ', '}
+              </>
+            ))}
+          </p>
+
+          <p class="publication-card__venue-full">{pub.venue}</p>
+
+          {pub.abstract && (
+            <p class="publication-card__abstract">{pub.abstract}</p>
+          )}
+
+          <div class="publication-card__tags">
+            {pub.tags.map(tag => (
+              <span class="publication-card__tag">{tag}</span>
+            ))}
+          </div>
+
+          {(pub.links.paper || pub.links.doi || pub.links.code) && (
+            <div class="publication-card__links">
+              {pub.links.paper && (
+                <a href={pub.links.paper} target="_blank" rel="noopener noreferrer" class="publication-card__link">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                    <polyline points="14 2 14 8 20 8"/>
+                    <line x1="16" y1="13" x2="8" y2="13"/>
+                    <line x1="16" y1="17" x2="8" y2="17"/>
+                  </svg>
+                  Paper
+                </a>
+              )}
+              {pub.links.code && (
+                <a href={pub.links.code} target="_blank" rel="noopener noreferrer" class="publication-card__link">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="16 18 22 12 16 6"/>
+                    <polyline points="8 6 2 12 8 18"/>
+                  </svg>
+                  Code
+                </a>
+              )}
+            </div>
+          )}
+
+          <div class="publication-card__glow"></div>
+        </article>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .publications {
+    padding: var(--section-padding) 0;
+    background: var(--bg-secondary);
+    position: relative;
+  }
+
+  .section-title {
+    text-align: center;
+    margin-bottom: 4rem;
+  }
+
+  .publications__list {
+    max-width: 800px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+  }
+
+  .publication-card {
+    position: relative;
+    background: var(--bg-card);
+    border: 1px solid var(--bg-tertiary);
+    border-radius: var(--radius-lg);
+    padding: 2rem;
+    transition: all var(--transition-normal);
+    overflow: hidden;
+  }
+
+  .publication-card:hover {
+    border-color: var(--neon-purple);
+    transform: translateY(-2px);
+  }
+
+  .publication-card:hover .publication-card__glow {
+    opacity: 1;
+  }
+
+  .publication-card__glow {
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(
+      circle at top left,
+      rgba(168, 85, 247, 0.1),
+      transparent 50%
+    );
+    opacity: 0;
+    transition: opacity var(--transition-normal);
+    pointer-events: none;
+  }
+
+  .publication-card__venue {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+    margin-bottom: 1rem;
+  }
+
+  .publication-card__venue-badge {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--neon-purple);
+    background: rgba(168, 85, 247, 0.15);
+    padding: 0.25rem 0.75rem;
+    border-radius: var(--radius-sm);
+    border: 1px solid rgba(168, 85, 247, 0.3);
+  }
+
+  .publication-card__year {
+    font-family: var(--font-mono);
+    font-size: 0.875rem;
+    color: var(--text-muted);
+  }
+
+  .publication-card__title {
+    font-size: 1.25rem;
+    color: var(--text-primary);
+    margin-bottom: 0.75rem;
+    line-height: 1.4;
+  }
+
+  .publication-card__authors {
+    font-size: 0.9375rem;
+    color: var(--text-secondary);
+    margin-bottom: 0.5rem;
+  }
+
+  .publication-card__author--highlight {
+    color: var(--neon-cyan);
+    font-weight: 500;
+  }
+
+  .publication-card__venue-full {
+    font-size: 0.875rem;
+    color: var(--text-muted);
+    font-style: italic;
+    margin-bottom: 1rem;
+  }
+
+  .publication-card__abstract {
+    font-size: 0.9375rem;
+    color: var(--text-secondary);
+    line-height: 1.6;
+    margin-bottom: 1rem;
+  }
+
+  .publication-card__tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+  }
+
+  .publication-card__tag {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    background: var(--bg-tertiary);
+    padding: 0.25rem 0.5rem;
+    border-radius: var(--radius-sm);
+  }
+
+  .publication-card__links {
+    display: flex;
+    gap: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--bg-tertiary);
+  }
+
+  .publication-card__link {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+    transition: color var(--transition-fast);
+  }
+
+  .publication-card__link:hover {
+    color: var(--neon-cyan);
+  }
+</style>
