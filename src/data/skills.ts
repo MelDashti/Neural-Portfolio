@@ -13,12 +13,14 @@ export const skills: Skill[] = [
   { id: 'langchain', name: 'LangChain', category: 'ai-ml', proficiency: 5 },
   { id: 'langgraph', name: 'LangGraph', category: 'ai-ml', proficiency: 5 },
   { id: 'lora', name: 'LoRA/QLoRA Fine-tuning', category: 'ai-ml', proficiency: 5 },
-  { id: 'prompt-eng', name: 'Prompt Engineering', category: 'ai-ml', proficiency: 5 },
-  { id: 'cv', name: 'Computer Vision', category: 'ai-ml', proficiency: 4 },
+  { id: 'vlm', name: 'Vision-Language Models', category: 'ai-ml', proficiency: 5 },
+  { id: 'clip', name: 'CLIP/SigLIP', category: 'ai-ml', proficiency: 5 },
+  { id: 'dino', name: 'DINOv2/DINOv3', category: 'ai-ml', proficiency: 5 },
+  { id: 'cv', name: 'Computer Vision', category: 'ai-ml', proficiency: 5 },
+  { id: 'attention', name: 'Attention Mechanisms', category: 'ai-ml', proficiency: 5 },
   { id: 'nlp', name: 'NLP', category: 'ai-ml', proficiency: 5 },
-  { id: 'diffusion', name: 'Diffusion Models', category: 'ai-ml', proficiency: 3 },
   { id: 'whisperx', name: 'WhisperX/FasterWhisper', category: 'ai-ml', proficiency: 5 },
-  { id: 'clip', name: 'CLIP', category: 'ai-ml', proficiency: 4 },
+  { id: 'czsl', name: 'Zero-Shot Learning', category: 'ai-ml', proficiency: 4 },
 
   // Frameworks
   { id: 'pytorch', name: 'PyTorch', category: 'frameworks', proficiency: 5 },
@@ -39,6 +41,7 @@ export const skills: Skill[] = [
   { id: 'sql', name: 'SQL', category: 'languages', proficiency: 4 },
 
   // Cloud & Infrastructure
+  { id: 'hpc', name: 'HPC/GPU Clusters', category: 'cloud', proficiency: 5 },
   { id: 'aws-s3', name: 'AWS S3', category: 'cloud', proficiency: 4 },
   { id: 'aws-lambda', name: 'AWS Lambda', category: 'cloud', proficiency: 3 },
   { id: 'aws-ecs', name: 'AWS ECS', category: 'cloud', proficiency: 4 },
@@ -46,6 +49,7 @@ export const skills: Skill[] = [
   { id: 'aws-sagemaker', name: 'AWS SageMaker', category: 'cloud', proficiency: 3 },
   { id: 'aws-bedrock', name: 'AWS Bedrock', category: 'cloud', proficiency: 4 },
   { id: 'docker', name: 'Docker', category: 'cloud', proficiency: 5 },
+  { id: 'slurm', name: 'SLURM', category: 'cloud', proficiency: 4 },
 
   // Tools & DBs
   { id: 'pinecone', name: 'Pinecone', category: 'tools', proficiency: 5 },
