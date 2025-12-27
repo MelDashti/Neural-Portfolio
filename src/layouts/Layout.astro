@@ -1,0 +1,146 @@
+---
+import ThemeToggle from '../components/ui/ThemeToggle.astro';
+
+interface Props {
+  title?: string;
+  description?: string;
+  image?: string;
+}
+
+const {
+  title = "Meelad Dashti | AI/ML Engineer",
+  description = "AI/ML Engineer specializing in RAG systems, LLM fine-tuning, and production-grade AI solutions. Building intelligent systems that solve real-world problems.",
+  image = "/og-image.png"
+} = Astro.props;
+
+const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="generator" content={Astro.generator} />
+
+    <!-- Primary Meta Tags -->
+    <title>{title}</title>
+    <meta name="title" content={title} />
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonicalURL} />
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={canonicalURL} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={new URL(image, Astro.site)} />
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image" />
+    <meta property="twitter:url" content={canonicalURL} />
+    <meta property="twitter:title" content={title} />
+    <meta property="twitter:description" content={description} />
+    <meta property="twitter:image" content={new URL(image, Astro.site)} />
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&family=Space+Grotesk:wght@500;600;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Theme Color -->
+    <meta name="theme-color" content="#0a0a0f" />
+
+    <!-- Prevent flash of wrong theme -->
+    <script is:inline>
+      const theme = localStorage.getItem('theme') || 'dark';
+      document.documentElement.setAttribute('data-theme', theme);
+    </script>
+  </head>
+  <body>
+    <nav class="nav">
+      <a href="#hero" class="nav__logo">&lt;MD/&gt;</a>
+      <div class="nav__links">
+        <a href="#about">About</a>
+        <a href="#skills">Skills</a>
+        <a href="#projects">Projects</a>
+        <a href="#experience">Experience</a>
+        <a href="#contact">Contact</a>
+      </div>
+      <ThemeToggle />
+    </nav>
+    <slot />
+  </body>
+</html>
+
+<style is:global>
+  .nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem 2rem;
+    background: rgba(10, 10, 15, 0.8);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid rgba(57, 255, 20, 0.2);
+  }
+
+  [data-theme="light"] .nav {
+    background: rgba(240, 244, 248, 0.9);
+    border-bottom-color: rgba(5, 150, 105, 0.2);
+  }
+
+  .nav__logo {
+    font-family: var(--font-mono);
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--neon-green);
+    text-shadow: var(--glow-green);
+    text-decoration: none;
+  }
+
+  .nav__links {
+    display: flex;
+    gap: 2rem;
+  }
+
+  .nav__links a {
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+    text-decoration: none;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    transition: all var(--transition-fast);
+  }
+
+  .nav__links a:hover {
+    color: var(--neon-green);
+    text-shadow: var(--glow-subtle);
+  }
+
+  @media (max-width: 768px) {
+    .nav__links {
+      display: none;
+    }
+
+    .nav {
+      padding: 1rem;
+    }
+  }
+</style>
+
+<style is:global>
+  @import '../styles/global.css';
+  @import '../styles/animations.css';
+</style>
