@@ -1,0 +1,120 @@
+---
+interface Props {
+  phrases: string[];
+  typingSpeed?: number;
+  deletingSpeed?: number;
+  pauseDuration?: number;
+  class?: string;
+}
+
+const {
+  phrases,
+  typingSpeed = 100,
+  deletingSpeed = 50,
+  pauseDuration = 2000,
+  class: className = '',
+} = Astro.props;
+---
+
+<span
+  class:list={['typewriter', className]}
+  data-phrases={JSON.stringify(phrases)}
+  data-typing-speed={typingSpeed}
+  data-deleting-speed={deletingSpeed}
+  data-pause-duration={pauseDuration}
+>
+  <span class="typewriter__text"></span>
+  <span class="typewriter__cursor">|</span>
+</span>
+
+<script>
+  class TypeWriter {
+    private element: HTMLElement;
+    private textElement: HTMLElement;
+    private phrases: string[];
+    private typingSpeed: number;
+    private deletingSpeed: number;
+    private pauseDuration: number;
+    private currentPhraseIndex: number = 0;
+    private currentCharIndex: number = 0;
+    private isDeleting: boolean = false;
+
+    constructor(element: HTMLElement) {
+      this.element = element;
+      this.textElement = element.querySelector('.typewriter__text') as HTMLElement;
+      this.phrases = JSON.parse(element.dataset.phrases || '[]');
+      this.typingSpeed = parseInt(element.dataset.typingSpeed || '100');
+      this.deletingSpeed = parseInt(element.dataset.deletingSpeed || '50');
+      this.pauseDuration = parseInt(element.dataset.pauseDuration || '2000');
+
+      if (this.phrases.length > 0) {
+        this.type();
+      }
+    }
+
+    private type(): void {
+      const currentPhrase = this.phrases[this.currentPhraseIndex];
+
+      if (this.isDeleting) {
+        this.currentCharIndex--;
+        this.textElement.textContent = currentPhrase.substring(0, this.currentCharIndex);
+
+        if (this.currentCharIndex === 0) {
+          this.isDeleting = false;
+          this.currentPhraseIndex = (this.currentPhraseIndex + 1) % this.phrases.length;
+          setTimeout(() => this.type(), this.typingSpeed);
+        } else {
+          setTimeout(() => this.type(), this.deletingSpeed);
+        }
+      } else {
+        this.currentCharIndex++;
+        this.textElement.textContent = currentPhrase.substring(0, this.currentCharIndex);
+
+        if (this.currentCharIndex === currentPhrase.length) {
+          this.isDeleting = true;
+          setTimeout(() => this.type(), this.pauseDuration);
+        } else {
+          setTimeout(() => this.type(), this.typingSpeed);
+        }
+      }
+    }
+  }
+
+  // Initialize all typewriters
+  function initTypeWriters() {
+    document.querySelectorAll('.typewriter').forEach(el => {
+      new TypeWriter(el as HTMLElement);
+    });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initTypeWriters);
+  } else {
+    initTypeWriters();
+  }
+</script>
+
+<style>
+  .typewriter {
+    display: inline;
+  }
+
+  .typewriter__text {
+    color: var(--text-secondary);
+  }
+
+  .typewriter__cursor {
+    color: var(--neon-pink);
+    text-shadow: var(--glow-pink);
+    animation: blink 1s step-end infinite;
+  }
+
+  @keyframes blink {
+    0%, 50% {
+      opacity: 1;
+    }
+    51%, 100% {
+      opacity: 0;
+    }
+  }
+</style>
